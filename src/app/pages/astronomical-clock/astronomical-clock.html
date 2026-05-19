@@ -1,0 +1,134 @@
+<section class="clock-page">
+  <div class="page-container">
+  <header class="clock-header">
+    <p class="eyebrow">Vista principal</p>
+
+    <h1>Reloj astronómico</h1>
+    <br>
+  </header>
+<div class="date-wrapper">
+  <mat-card class="date-panel">
+    <mat-card-content class="date-grid">
+      <div class="date-header">
+        <span>Fecha de observación</span>
+      </div>
+
+      <div class="date-controls">
+
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>Selecciona una fecha</mat-label>
+          <input matInput [matDatepicker]="picker"   [value]="pendingSelectedDate()"
+          (dateChange)="onPendingDateChange($event.value)"/>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button
+          mat-fab
+          class="search-button"
+          type="button"
+          (click)="searchAstronomicalData()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+  <section class="clock-layout">
+    <article class="clock-stage">
+      <img
+        src="/assets/images/base_del_reloj_fondo_circular.png"
+        alt="Base visual del reloj astronómico"
+        class="clock-image"
+      />
+    </article>
+
+
+    <mat-card class="info-panel">
+      <mat-card-header>
+        <mat-card-title>Lectura celeste</mat-card-title>
+        <mat-card-subtitle>Datos iniciales del prototipo</mat-card-subtitle>
+
+      </mat-card-header>
+
+      <mat-card-content class="data-grid">
+        <div>
+          <span>Sol</span>
+          <strong>Movimiento aparente</strong>
+          <small>
+            Altitud: {{ sunMovement().altitude }}°
+          </small>
+          <small>
+            Azimut: {{ sunMovement().azimuth }}°
+          </small>
+          <small>
+            Estado:
+            {{ sunMovement().isAboveHorizon ? 'Sobre el horizonte' : 'Bajo el horizonte' }}
+          </small>
+        </div>
+
+        <div>
+          <span>Luna</span>
+          <strong>Fase actual</strong>
+           <small>
+              Ángulo lunar: {{ moonPhase().phaseAngle }}°
+            </small>
+
+            <small>
+              Iluminación: {{ moonPhase().illuminationPercent }}%
+            </small>
+        </div>
+
+        <div>    
+          <span>Tiempo</span>
+          <strong>Solar / local</strong>
+          <small>
+                Hora local: {{ solarTime().localTime }}
+              </small>
+
+              <small>
+                Hora solar: {{ solarTime().solarTime }}
+              </small>
+
+              <small>
+                Corrección: {{ solarTime().timeCorrectionMinutes }} min
+              </small>
+        </div>
+
+        <div>
+          <span>Zodiaco</span>
+          <strong>Signo calculado</strong>
+           <strong>
+              {{ zodiacPosition().zodiacSymbol }}
+              {{ zodiacPosition().zodiacSign }}
+            </strong>
+
+            <small>
+              Longitud eclíptica:
+              {{ zodiacPosition().eclipticLongitude }}°
+            </small>
+
+            <small>
+              Rotación zodiacal:
+              {{ zodiacPosition().zodiacRotationDeg }}°
+            </small>
+        </div>
+
+       
+      </mat-card-content>
+    </mat-card>
+  </section>
+  </div>
+  @if (isLoading()) {
+    <div class="page-loader">
+      <div class="loader-card">
+        <mat-icon>auto_awesome</mat-icon>
+        <strong>Calculando lectura celeste...</strong>
+        <span>Sincronizando Sol, Luna y zodiaco</span>
+      </div>
+    </div>
+  }
+</section>

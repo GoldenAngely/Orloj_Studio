@@ -1,0 +1,38 @@
+
+<mat-toolbar class="navbar">
+  <a class="brand" routerLink="/" (click)="closeMenu()">
+    <span class="brand-mark">✦</span>
+    <span>Orloj Studio</span>
+  </a>
+
+  <button
+    matIconButton
+    class="menu-button"
+    type="button"
+    aria-label="Abrir menú"
+    (click)="toggleMenu()"
+  >
+    <mat-icon>{{ menuOpen() ? 'close' : 'menu' }}</mat-icon>
+  </button>
+
+  <nav class="nav-links" [class.is-open]="menuOpen()">
+    <a
+      matButton
+      routerLink="/"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeMenu()"
+    >
+      Inicio
+    </a>
+
+    <a
+      matButton
+      routerLink="/reloj-astronomico"
+      routerLinkActive="active-link"
+      (click)="closeMenu()"
+    >
+      Reloj astronómico
+    </a>
+  </nav>
+</mat-toolbar>

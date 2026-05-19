@@ -1,0 +1,19 @@
+.app-shell {
+    min-height: 100dvh;
+}
+
+.page-container {
+  animation: fade-slide 350ms ease;
+}
+
+@keyframes fade-slide {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

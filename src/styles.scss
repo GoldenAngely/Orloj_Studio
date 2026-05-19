@@ -1,1 +1,59 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, Roboto, Arial, sans-serif;
+  background: #020305;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.cdk-overlay-pane {
+  .mat-datepicker-content {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.03)
+      ),
+      rgba(8, 13, 22, 0.92) !important;
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(217, 171, 80, 0.22);
+    border-radius: 1.5rem;
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.mat-calendar-body-selected {
+  background-color: #d9ab50 !important;
+  color: #08111d !important;
+}
+
+.mat-calendar-body-selected.mat-calendar-body-today {
+  background-color: #d9ab50 !important;
+  color: #08111d !important;
+  border-color: #f4d28c !important;
+}
+
+.mat-calendar-body-cell:hover .mat-calendar-body-cell-content {
+  background-color: rgba(217, 171, 80, 0.18) !important;
+}
+
+.mat-calendar-body-active .mat-calendar-body-cell-content {
+  border-color: #d9ab50 !important;
+}
