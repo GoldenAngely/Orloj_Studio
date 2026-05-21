@@ -1,0 +1,80 @@
+<section class="catalog-page">
+  <h1>Mapeos</h1>
+
+  <ng-container
+    *ngTemplateOutlet="tableTemplate; context: {
+      title: 'Work Schemes',
+      data: workSchemes()
+    }">
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="tableTemplate; context: {
+      title: 'Teams',
+      data: teams()
+    }">
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="tableTemplate; context: {
+      title: 'OUs',
+      data: ous()
+    }">
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="tableTemplate; context: {
+      title: 'Shifts',
+      data: shifts()
+    }">
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="tableTemplate; context: {
+      title: 'Stations',
+      data: stations()
+    }">
+  </ng-container>
+</section>
+
+<ng-template #tableTemplate let-title="title" let-data="data">
+  <article class="catalog-card">
+    <h2>{{ title }}</h2>
+
+    @if (data.length === 0) {
+      <p class="empty-message">Sin datos disponibles.</p>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              @for (column of getColumns(data); track column) {
+                <th>{{ column }}</th>
+              }
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (row of data; track $index) {
+              <tr>
+                @for (column of getColumns(data); track column) {
+                  <td>
+                    @if (getValue(row, column); as value) {
+                      @if (typeof value === 'object') {
+                        <pre>{{ value | json }}</pre>
+                      } @else {
+                        {{ value }}
+                      }
+                    } @else {
+                      —
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </article>
+</ng-template>
