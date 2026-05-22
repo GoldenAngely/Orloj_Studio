@@ -1,80 +1,52 @@
 <section class="catalog-page">
-  <h1>Mapeos</h1>
+  <br>
+  <h1>Mapeos Práctica 1</h1>
 
-  <ng-container
-    *ngTemplateOutlet="tableTemplate; context: {
-      title: 'Work Schemes',
-      data: workSchemes()
-    }">
-  </ng-container>
+  @for (catalog of catalogs(); track catalog.title) {
+    <article class="catalog-card">
+      <h2>{{ catalog.title }}</h2>
 
-  <ng-container
-    *ngTemplateOutlet="tableTemplate; context: {
-      title: 'Teams',
-      data: teams()
-    }">
-  </ng-container>
-
-  <ng-container
-    *ngTemplateOutlet="tableTemplate; context: {
-      title: 'OUs',
-      data: ous()
-    }">
-  </ng-container>
-
-  <ng-container
-    *ngTemplateOutlet="tableTemplate; context: {
-      title: 'Shifts',
-      data: shifts()
-    }">
-  </ng-container>
-
-  <ng-container
-    *ngTemplateOutlet="tableTemplate; context: {
-      title: 'Stations',
-      data: stations()
-    }">
-  </ng-container>
-</section>
-
-<ng-template #tableTemplate let-title="title" let-data="data">
-  <article class="catalog-card">
-    <h2>{{ title }}</h2>
-
-    @if (data.length === 0) {
-      <p class="empty-message">Sin datos disponibles.</p>
-    } @else {
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              @for (column of getColumns(data); track column) {
-                <th>{{ column }}</th>
-              }
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (row of data; track $index) {
+      @if (catalog.loading) {
+        <p>Cargando...</p>
+      } @else if (catalog.error) {
+        <p class="error-message">{{ catalog.error }}</p>
+      } @else if (catalog.rows.length === 0) {
+        <p class="empty-message">Sin datos disponibles.</p>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
               <tr>
-                @for (column of getColumns(data); track column) {
-                  <td>
-                    @if (getValue(row, column); as value) {
-                      @if (typeof value === 'object') {
-                        <pre>{{ value | json }}</pre>
-                      } @else {
-                        {{ value }}
-                      }
-                    } @else {
-                      —
-                    }
-                  </td>
+                @for (column of catalog.columns; track column) {
+                  <th>{{ column }}</th>
                 }
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-  </article>
-</ng-template>
+            </thead>
+
+            <tbody>
+              @for (row of catalog.rows; track $index) {
+                <tr>
+                  @for (column of catalog.columns; track column) {
+                    <td>
+                      @let value = getValue(row, column);
+
+                      @if (value !== null && value !== undefined && value !== '') {
+                        @if (isObject(value)) {
+                          <pre>{{ value | json }}</pre>
+                        } @else {
+                          {{ value }}
+                        }
+                      } @else {
+                        —
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  }
+</section>

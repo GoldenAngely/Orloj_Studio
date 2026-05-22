@@ -1,55 +1,82 @@
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
+import { catchError, finalize, of, Observable } from 'rxjs';
 import { GeneralService } from '../../core/services/general-service';
-import { JsonPipe } from '@angular/common';
+import { CatalogTable, TableRow } from '../../interfaces/general-interfaces';
 
 @Component({
   selector: 'app-mapping-practice1',
-  imports: [JsonPipe],
   standalone: true,
+  imports: [CommonModule, JsonPipe],
   templateUrl: './mapping-practice1.html',
   styleUrl: './mapping-practice1.scss',
 })
 export class MappingPractice1 {
   private readonly catalogsService = inject(GeneralService);
 
-  workSchemes = signal<unknown[]>([]);
-  teams = signal<unknown[]>([]);
-  ous = signal<unknown[]>([]);
-  shifts = signal<unknown[]>([]);
-  stations = signal<unknown[]>([]);
+  catalogs = signal<CatalogTable[]>([
+    this.createEmptyTable('Work Schemes'),
+    this.createEmptyTable('Teams'),
+    this.createEmptyTable('OUs'),
+    this.createEmptyTable('Shifts'),
+  ]);
 
   ngOnInit(): void {
-    this.catalogsService.getWorkSchemes()
-      .subscribe(data => this.workSchemes.set(data));
-
-    this.catalogsService.getTeams()
-      .subscribe(data => this.teams.set(data));
-
-    this.catalogsService.getOus()
-      .subscribe(data => this.ous.set(data));
-
-    this.catalogsService.getShifts()
-      .subscribe(data => this.shifts.set(data));
-
-    this.catalogsService.getStations()
-      .subscribe(data => this.stations.set(data));
+    this.loadCatalog(0, this.catalogsService.getWorkSchemes());
+    this.loadCatalog(1, this.catalogsService.getTeams());
+    this.loadCatalog(2, this.catalogsService.getOus());
+    this.loadCatalog(3, this.catalogsService.getShifts());
   }
 
-  getColumns(data: unknown[]): string[] {
-    const firstItem = data[0];
+  private loadCatalog<TItem extends object>(index: number, request$: Observable<TItem[]>): void {
+    this.updateCatalog(index, { loading: true, error: null });
+    request$
+      .pipe(
+        catchError((error) => {
+          console.error('Catalog error:', error);
 
-    if (!firstItem || typeof firstItem !== 'object') {
-      return [];
-    }
+          this.updateCatalog(index, {
+            error: 'No se pudo cargar este catálogo.',
+            rows: [],
+            columns: [],
+          });
 
-    return Object.keys(firstItem);
+          return of([]);
+        }),
+        finalize(() => {
+          this.updateCatalog(index, { loading: false });
+        }),
+      )
+      .subscribe((data) => {
+        const rows = data as TableRow[];
+        this.updateCatalog(index, {
+          rows,
+          columns: this.getColumns(rows),
+        });
+      });
   }
 
-  getValue(row: unknown, column: string): unknown {
-    if (!row || typeof row !== 'object') {
-      return '';
-    }
+  private createEmptyTable(title: string): CatalogTable {
+    return { title, rows: [], columns: [], loading: false, error: null };
+  }
 
-    return (row as Record<string, unknown>)[column];
+  private updateCatalog(index: number, changes: Partial<CatalogTable>): void {
+    this.catalogs.update((catalogs) =>
+      catalogs.map((catalog, currentIndex) =>
+        currentIndex === index ? { ...catalog, ...changes } : catalog,
+      ),
+    );
+  }
+
+  getValue(row: TableRow, column: string): unknown {
+    return row[column];
+  }
+
+  isObject(value: unknown): boolean {
+    return typeof value === 'object' && value !== null;
+  }
+
+  private getColumns(rows: TableRow[]): string[] {
+    return rows.length > 0 ? Object.keys(rows[0]) : [];
   }
 }
