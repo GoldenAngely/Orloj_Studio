@@ -1,25 +1,27 @@
-import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { ApiResponse } from '../../interfaces/general-interfaces';
+
 
 type QueryParams = Record<string, string | number | boolean | null | undefined>;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiBaseUrl;
 
-  get<TResponse>(endpoint: string, params?: QueryParams): Observable<TResponse> {
-  return this.http.get<TResponse>(
-    this.buildUrl(endpoint),
-    {
-      params: this.buildParams(params)
-    }
-  );
-}
+  get<TResponse>(
+    endpoint: string,
+    params?: QueryParams
+  ): Observable<TResponse> {
+    return this.http
+      .get<ApiResponse<TResponse>>(this.buildUrl(endpoint), {
+        params: this.buildParams(params),
+      })
+      .pipe(map(response => response.result));
+  }
 
   private buildUrl(endpoint: string): string {
     const cleanBase = this.baseUrl.replace(/\/$/, '');
@@ -39,5 +41,4 @@ export class ApiService {
 
     return httpParams;
   }
-
 }

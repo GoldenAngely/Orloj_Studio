@@ -1,18 +1,16 @@
 .catalog-page {
+  padding: 2rem;
   display: grid;
   gap: 1.5rem;
-  padding: 1.5rem;
+  color: #1f2937;
+  background: #f8fafc;
 }
 
 .catalog-card {
-  padding: 1rem;
-  border-radius: 16px;
   background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-
-  h2 {
-    margin-bottom: 1rem;
-  }
 }
 
 .table-wrapper {
@@ -21,8 +19,8 @@
 
 table {
   width: 100%;
+  min-width: 700px;
   border-collapse: collapse;
-  min-width: 600px;
 }
 
 th,
@@ -33,15 +31,14 @@ td {
 }
 
 th {
+  background: #f1f5f9;
   font-weight: 700;
-  background: #f8fafc;
-}
-
-pre {
-  margin: 0;
-  white-space: pre-wrap;
 }
 
 .empty-message {
   color: #6b7280;
+}
+
+.error-message {
+  color: #dc2626;
 }
