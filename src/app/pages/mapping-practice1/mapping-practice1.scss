@@ -1,44 +1,158 @@
 .catalog-page {
-  padding: 2rem;
+  min-height: 100vh;
+  padding: 2.5rem 3rem;
   display: grid;
-  gap: 1.5rem;
-  color: #1f2937;
-  background: #f8fafc;
+  gap: 1.25rem;
+  color: #0f172a;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.09), transparent 34rem),
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 32rem),
+    linear-gradient(180deg, #f8fafc 0%, #eef3f8 100%);
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  padding: 0 1rem 1.5rem;
+}
+
+.catalog-page h1 {
+  margin: 0;
+  color: #0f2f4f;
+  font-size: 1.65rem;
+  font-weight: 900;
+}
+
+.catalog-tabs {
+  background: #ffffff;
+  border: 1px solid #dbe7f5;
+  border-radius: 22px;
+  box-shadow:
+    0 14px 34px rgba(15, 23, 42, 0.045),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  animation: sladeIn 0.8s ease;
+  ::ng-deep .mat-mdc-tab-header {
+    background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+    border-bottom: 1px solid #dbe7f5;
+  }
+
+  ::ng-deep .mat-mdc-tab {
+    min-width: 150px;
+    height: 52px;
+    font-weight: 800;
+  }
+
+  ::ng-deep .mdc-tab__text-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #334155;
+  }
+
+  ::ng-deep .mdc-tab--active .mdc-tab__text-label {
+    color: #005187;
+  }
+
+  ::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+    border-color: #005187;
+    border-top-width: 3px;
+  }
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
 }
 
 .catalog-card {
-  background: #ffffff;
-  border-radius: 1rem;
-  padding: 1.25rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.table-wrapper {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  min-width: 700px;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-}
-
-th {
-  background: #f1f5f9;
-  font-weight: 700;
-}
-
-.empty-message {
-  color: #6b7280;
+  padding: 1.15rem;
+  animation: FadeIn 0.8s ease;
 }
 
 .error-message {
   color: #dc2626;
+  font-weight: 800;
+}
+
+.empty-message {
+  color: #64748b;
+  font-weight: 700;
+}
+
+// .catalog-card {
+//   position: relative;
+//   padding: 2rem;
+//   overflow: hidden;
+//   background:
+//     linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.92));
+//   border: 1px solid rgba(219, 231, 245, 0.95);
+//   border-radius: 28px;
+//   box-shadow:
+//     0 24px 60px rgba(15, 23, 42, 0.09),
+//     0 1px 0 rgba(255, 255, 255, 0.85) inset;
+//   scroll-snap-align: start;
+//   scroll-margin-top: 1.5rem;
+//   animation: sectionFadeIn 520ms ease both;
+// }
+
+@keyframes sectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.catalog-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  opacity: 0.85;
+}
+
+.catalog-card h2 {
+  margin: 0 0 1.5rem;
+  color: #0b1f3a;
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.empty-message,
+.error-message {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  font-weight: 750;
+}
+
+.empty-message {
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+}
+
+.error-message {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 768px) {
+  .catalog-page {
+    padding: 1.25rem;
+  }
+
+  .catalog-card {
+    padding: 1.25rem;
+    border-radius: 22px;
+  }
+
+  .catalog-page h1 {
+    font-size: 2.45rem;
+  }
 }

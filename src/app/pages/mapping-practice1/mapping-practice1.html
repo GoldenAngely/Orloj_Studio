@@ -1,52 +1,31 @@
 <section class="catalog-page">
   <br>
-  <h1>Mapeos Práctica 1</h1>
 
-  @for (catalog of catalogs(); track catalog.title) {
-    <article class="catalog-card">
-      <h2>{{ catalog.title }}</h2>
+  <h1>Mapeos</h1>
 
-      @if (catalog.loading) {
-        <p>Cargando...</p>
-      } @else if (catalog.error) {
-        <p class="error-message">{{ catalog.error }}</p>
-      } @else if (catalog.rows.length === 0) {
-        <p class="empty-message">Sin datos disponibles.</p>
-      } @else {
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                @for (column of catalog.columns; track column) {
-                  <th>{{ column }}</th>
-                }
-              </tr>
-            </thead>
+  <mat-tab-group class="catalog-tabs" animationDuration="250ms">
+    @for (catalog of catalogs(); track catalog.title) {
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">{{ getCatalogIcon(catalog.title) }}</mat-icon>
+          {{ catalog.title }}
+        </ng-template>
 
-            <tbody>
-              @for (row of catalog.rows; track $index) {
-                <tr>
-                  @for (column of catalog.columns; track column) {
-                    <td>
-                      @let value = getValue(row, column);
-
-                      @if (value !== null && value !== undefined && value !== '') {
-                        @if (isObject(value)) {
-                          <pre>{{ value | json }}</pre>
-                        } @else {
-                          {{ value }}
-                        }
-                      } @else {
-                        —
-                      }
-                    </td>
-                  }
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </article>
-  }
+        <article class="catalog-card">
+          @if (catalog.loading) {
+            <p>Cargando...</p>
+          } @else if (catalog.error) {
+            <p class="error-message">{{ catalog.error }}</p>
+          } @else if (catalog.rows.length === 0) {
+            <p class="empty-message">Sin datos disponibles.</p>
+          } @else {
+            <app-catalog-material-table
+              [columns]="catalog.columns"
+              [rows]="catalog.rows">
+            </app-catalog-material-table>
+          }
+        </article>
+      </mat-tab>
+    }
+  </mat-tab-group>
 </section>

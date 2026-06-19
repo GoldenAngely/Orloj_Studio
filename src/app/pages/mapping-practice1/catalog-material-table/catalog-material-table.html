@@ -1,0 +1,90 @@
+<div class="catalog-table-layout">
+  <div class="table-topbar">
+    <div class="table-title-area">
+      <span class="count-chip">
+        <mat-icon>storage</mat-icon>
+        {{ dataSource.filteredData.length }} registros
+      </span>
+    </div>
+
+    <div class="table-actions">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+
+        <input
+          matInput
+          #searchInput
+          type="text"
+          placeholder="Buscar..."
+          (keyup)="applyFilter($event)"
+        />
+
+        @if (searchInput.value) {
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            aria-label="Limpiar búsqueda"
+            (click)="clearFilter(searchInput)">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="material-table-container">
+    <div class="table-wrapper">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        class="catalog-table">
+
+        @for (column of columns; track column) {
+          <ng-container [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <span class="header-cell-content">
+                <mat-icon>{{ getColumnIcon(column) }}</mat-icon>
+                {{ formatColumnName(column) }}
+              </span>
+            </th>
+
+            <td mat-cell *matCellDef="let row">
+              @let value = getValue(row, column);
+
+              @if (value !== null && value !== undefined && value !== '') {
+                @if (isBoolean(value)) {
+                  <span
+                    class="status-badge"
+                    [class.active]="value === true"
+                    [class.inactive]="value === false">
+                    {{ value ? 'Activo' : 'Inactivo' }}
+                  </span>
+                } @else if (isObject(value)) {
+                  <pre>{{ value | json }}</pre>
+                } @else {
+                  <span class="cell-value">{{ value }}</span>
+                }
+              } @else {
+                <span class="empty-cell">—</span>
+              }
+            </td>
+          </ng-container>
+        }
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+
+    <div class="table-footer">
+      <mat-paginator
+        class="catalog-paginator"
+        [pageSize]="10"
+        [hidePageSize]="true"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

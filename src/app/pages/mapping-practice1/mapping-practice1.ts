@@ -3,11 +3,14 @@ import { Component, inject, signal } from '@angular/core';
 import { catchError, finalize, of, Observable } from 'rxjs';
 import { GeneralService } from '../../core/services/general-service';
 import { CatalogTable, TableRow } from '../../interfaces/general-interfaces';
+import { CatalogMaterialTable } from './catalog-material-table/catalog-material-table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-mapping-practice1',
   standalone: true,
-  imports: [CommonModule, JsonPipe],
+  imports: [CommonModule, CatalogMaterialTable, MatTabsModule, MatIconModule],
   templateUrl: './mapping-practice1.html',
   styleUrl: './mapping-practice1.scss',
 })
@@ -68,15 +71,20 @@ export class MappingPractice1 {
     );
   }
 
-  getValue(row: TableRow, column: string): unknown {
-    return row[column];
-  }
-
-  isObject(value: unknown): boolean {
-    return typeof value === 'object' && value !== null;
-  }
-
   private getColumns(rows: TableRow[]): string[] {
     return rows.length > 0 ? Object.keys(rows[0]) : [];
   }
+
+  getCatalogIcon(title: string): string {
+  const normalizedTitle = title.toLowerCase();
+
+  if (normalizedTitle.includes('team')) return 'groups';
+  if (normalizedTitle.includes('area')) return 'domain';
+  if (normalizedTitle.includes('station')) return 'precision_manufacturing';
+  if (normalizedTitle.includes('shift') || normalizedTitle.includes('turno')) return 'schedule';
+  if (normalizedTitle.includes('model') || normalizedTitle.includes('modelo')) return 'directions_car';
+  if (normalizedTitle.includes('line')) return 'account_tree';
+
+  return 'storage';
+}
 }
